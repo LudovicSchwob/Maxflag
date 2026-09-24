@@ -1,0 +1,143 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%LES PACKAGES
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{enumerate}
+\usepackage{multirow}
+\usepackage{blkarray}
+\usepackage{graphicx}
+\usepackage{amssymb}
+%\usepackage{MnSymbol}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{mathtools}
+\usepackage{stmaryrd}
+\usepackage{todonotes}
+\usepackage{cancel}
+\usepackage{ulem}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usepackage{comment}
+\usepackage{textcomp}
+\usepackage{layout}
+\usepackage{yhmath}
+\usepackage{enumitem}
+\usepackage{MnSymbol}
+\usetikzlibrary{arrows}
+\usetikzlibrary{decorations.pathmorphing}
+
+%Captions
+\usepackage{subcaption}
+\usepackage{cases}
+\captionsetup[subfigure]{width=0.9\textwidth}
+
+%blocks
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{conjecture}[theorem]{Conjecture}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{question}[theorem]{Question}
+
+%tikz
+\usetikzlibrary{calc, backgrounds}
+
+%Macros textes
+\newcommand{\decoStar}{(*)}
+\newcommand{\Sn}{\mathfrak{S}_n}
+\renewcommand{\S}{\mathfrak{S}}
+\newcommand{\inv}[1]{\text{inv}(#1)}
+\newcommand{\mathdash}{\relbar\mkern-9mu\relbar}
+\newcommand{\w}{\omega}
+\newcommand{\cliques}{\text{Cliques}}
+\newcommand{\True}{\mathbf{T}}
+\newcommand{\False}{\mathbf{F}}
+\newcommand{\dC}{\delta_\equiv}
+\newcommand{\llb}{\left \llbracket}
+\newcommand{\rrb}{\right\rrbracket}
+\newcommand{\thru}{\textit{passes}\:}
+\newcommand{\thruing}{\textit{passing}\:}
+\newcommand{\thrunos}{\textit{pass}\:}
+\newcommand{\linked}{\textit{linked}\:}
+\newcommand{\Linked}{\textit{Linked}\:}
+\newcommand{\idealad}{ideal\:}
+\newcommand{\Idealad}{Ideal\:}
+\newcommand{\flip}{\textit{quotient flip}\:}
+\newcommand{\flips}{\textit{quotient flips}\:}
+\newcommand{\Flip}{\textit{Quotient flip}\:}
+\newcommand{\Flips}{\textit{Quotient flips}\:}
+\newcommand{\class}{\textit{quotient class}\:}
+\newcommand{\Class}{\textit{Quotient class}\:}
+\newcommand{\NCAD}{\textup{NCAD}}
+\newcommand{\NCADn}{\textup{\textbf{NCAD}}_n}
+\newcommand{\NCADs}{\textup{NCADs}}
+\newcommand{\LatQuo}{\Sn/\equiv}
+\newcommand{\quoDiag}{quotient diagram\:}
+\newcommand{\quoDiags}{quotient diagrams\:}
+\newcommand{\QuoDiag}{Quotient diagram\:}
+\newcommand{\QuoSet}{\textup{\textbf{Quo}}_n}
+
+
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\R}{\mathbb R}
+\newcommand{\K}{\mathbb K}
+\newcommand{\dps}{\displaystyle}
+\newcommand{\Pos}{\mathcal P}
+\newcommand{\RPos}{\mathcal R}
+\renewcommand{\L}{\mathbf L}
+\newcommand{\Tree}{T}
+\newcommand{\Trees}{\operatorname{T}}
+\newcommand{\IdL}{\mathbf{Low}}
+\newcommand{\IdU}{\mathbf{Upp}}
+\newcommand{\JIrr}{\mathcal J}
+\newcommand{\MIrr}{\mathcal M}
+\newcommand{\Tam}{\mathbf{Tam}}
+\newcommand{\Jura}{\mathbf{Jura}}
+\newcommand{\Sort}{\mathbf{Sort}}
+\newcommand{\Spine}{\mathbf{Spine}}
+\newcommand{\SpinePos}{\mathcal{G}}
+\newcommand{\Cong}{\mathbf{Cong}}
+\newcommand{\Camb}{\mathbf{Camb}}
+\newcommand{\JuraTilt}{\mathbf{JuraTilt}}
+\newcommand{\AltJura}{\mathbf{AltJura}}
+
+\newcommand{\maxcomplex}{\Delta^{Max}}
+
+\newcommand{\Cat}{\operatorname{Cat}}
+\newcommand{\Tilt}{\operatorname{Tilt}}
+
+\newcommand{\Pairs}{\operatorname{Pairs}}
+\newcommand{\inj}{\xhookrightarrow{}}
+\newcommand{\surj}{\twoheadrightarrow}
+
+ \DeclareFontFamily{U}{wncy}{}
+ \DeclareFontShape{U}{wncy}{m}{n}{<->wncyr10}{}
+ \DeclareSymbolFont{mcy}{U}{wncy}{m}{n}
+ \DeclareMathSymbol{\Sha}{\mathord}{mcy}{"58} 
+
+ \newcommand{\includeSymbol}[1]{\ensuremath{%
+ 		\mathchoice
+ 		{\raisebox{-.7mm}{\includegraphics[height=2.2ex]{#1}}}	
+ 		{\raisebox{-.7mm}{\includegraphics[height=2.2ex]{#1}}}
+ 		{\raisebox{-.6mm}{\includegraphics[height=1.6ex]{#1}}}
+ 		{\raisebox{-.5mm}{\includegraphics[height=1ex]{#1}}}
+ }}
+ \newcommand{\decoI}{\includeSymbol{permutree/none}}
+ \newcommand{\decoY}{\includeSymbol{permutree/up}}
+ \newcommand{\decoL}{\includeSymbol{permutree/down}}
+ \newcommand{\decoX}{\includeSymbol{permutree/updown}}
+
+\definecolor{darkblue}{rgb}{0,0,0.7} % darkblue color
+\newcommand{\darkblue}{\color{darkblue}} % darkblue command
+\newcommand{\defn}[1]{\textsl{\darkblue #1}} % emphasis of a definition
+
+%Todo
+\newcommand{\todolouis}[1]{\todo[color=green!40,inline]{Louis : #1}}
+\newcommand{\todoludo}[1]{\todo[color=blue!40,inline]{Louis : #1}}
+
+\graphicspath{ {./images/} }

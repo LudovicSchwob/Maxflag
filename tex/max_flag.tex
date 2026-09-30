@@ -1,0 +1,53 @@
+\documentclass{article}
+
+\title{Max-flag lattices}
+\input{macro.tex}
+
+\begin{document}
+	\author{Louis Marin, Ludovic Schwob}
+	
+	\maketitle
+
+    \tableofcontents
+
+    \section{Preliminaries}
+
+    \begin{definition}
+      A finite lattice $\L$ is \defn{max-flag} if its \defn{max-complex} $$\maxcomplex(\L):=\{\max \{j\in \JIrr(\L):j\le x\}:x\in \L\}$$ is a simplicial complex which is flag.
+    \end{definition}
+    
+	\section{Max flag Permutrees}
+
+    We can characterize permutree quotients which are max-flag.
+
+    \begin{proposition}
+        Let $\delta\in \{\decoX, \decoY, \decoL, \decoI\}^n$. The $\delta$-permutree quotient of the weak order on $\Sn$ is max-flag if and only if $\delta$ does not contain $\decoI\decoI$, $\decoI\decoL$, $\decoY\decoI$ or $\decoY\decoL$ consecutively.
+    \end{proposition}
+	
+	On $\Sn$, there are $4\cdot 3^{n-3}$ permutree quotients which are max flag, out of which $2^{n-3}$ are minimal when ordering quotients by the inclusion of their forcing order filter.
+    One can construct an automaton from binary words of size $n-3$ to minimal max flag permutree decorations in $\{\decoI, \decoL, \decoY,\decoX\}^{n-2}$.
+	
+	The patterns to be avoided are obtained from the following observations. In the weak order, the interval between the identity permutation and permutations of the form $(i,i+3)$ is not max flag. Thus, for each consecutive pair of decorations $\decoStar_i,\decoStar_{i+1}$ in a max flag permutree, at least one of $\decoL_i$ or $\decoY_{i+1}$.
+	
+	\begin{question}[Max flag permutrees]
+		\begin{itemize}
+			\item The number of elements in a max flag permutree seems to factorize nicely always (no factor greater than $2n$). (Worst case being Cambrian).
+			\item Geometric representation of the irreducibles posets of each max flag permutree quotients
+			\item Combinatorial description of compatibility relations in the Max Complex.
+			\item Proof (pattern avoidance $\implies$ max flag)
+		\end{itemize}
+	\end{question}
+	
+	\section{Max flag ASM Permutrees}
+
+    ASM permutree quotients are exactly the permutree quotients which are max-flag and whose dual is max-flag.
+	
+	\begin{question}[Max flag ASM Permutrees]
+		\item How do max flag ASM Permutrees look.
+	\end{question}
+
+    \begin{question}[Max flag ASM Permutrees]
+		\item What about ASMs quotients which are max-flag ? (not only permutrees)
+	\end{question}
+	
+\end{document}

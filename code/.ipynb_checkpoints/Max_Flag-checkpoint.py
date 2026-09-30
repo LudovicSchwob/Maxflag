@@ -291,6 +291,20 @@ def isRectangle(P):
 
 
 
+def maxRep(P):
+    max_rep_list = []
+    for elt in rand_quo.minElements(True):
+    #print(type(elt))
+        m = JI_P.subposet([j for j in JI_P if L.is_lequal(j,elt)]).maximal_elements()
+        list_of_arcs = []
+        for i in range(len(m)):
+            #print(type(m[i].nonCrossingArcDiag().arc_list[0]))
+            list_of_arcs.append(m[i].nonCrossingArcDiag().arc_list[0])
+        max_rep_list.append(ArcDiag(list_of_arcs,n))
+    return max_rep_list
+    
+
+
 
 """
 # # Tests

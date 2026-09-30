@@ -1,4 +1,3 @@
-from Classes import *
 from Transformations import *
 
 def Gogs(n):

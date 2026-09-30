@@ -1,4 +1,4 @@
-from Classes import *
+from Classes_ASM import *
 
 #Bijection entre triangles Gog et ASM
 ##def Gog_to_ASM(G):

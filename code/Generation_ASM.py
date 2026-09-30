@@ -1,5 +1,4 @@
-from Classes import *
-from Transformations import *
+from Transformations_ASM import *
 
 def Gogs(n):
     L=[[list(range(1,n+1))]]

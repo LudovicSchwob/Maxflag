@@ -1,5 +1,4 @@
-from Transformations import *
-from Classes import *
+from Transformations_ASM import *
 
 #Statistiques Alpha
 def Alpha_ASM(M):

@@ -2870,6 +2870,9 @@ class WOQuotient:
         else:
             return self.ideal.graph(shift)
 
+    def draw(self, a = None, size = 70, style = 'osef'):
+        return self.ideal.draw(a , size, style)
+
     def elementGraphSCAB(self,element,JI_poset,MI_poset,shift=0):
         #JI_poset = SingleArc.posetOfJI(self.n)
         #MI_poset = SingleArc.posetOfMI(self.n)

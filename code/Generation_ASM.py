@@ -1,8 +1,5 @@
-<<<<<<< HEAD
-from Transformations import *
-=======
 from Transformations_ASM import *
->>>>>>> refs/remotes/origin/main
+
 
 def Gogs(n):
     L=[[list(range(1,n+1))]]

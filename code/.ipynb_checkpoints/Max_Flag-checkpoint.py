@@ -291,6 +291,25 @@ def isRectangle(P):
 
 
 
+def maxRep(quo,with_elt=False):
+    max_rep_list = []
+    L = LatticePoset(quo.poset())
+    JI_P = L.join_irreducibles_poset()
+    for elt in quo.minElements(True):
+    #print(type(elt))
+        m = JI_P.subposet([j for j in JI_P if L.is_lequal(j,elt)]).maximal_elements()
+        list_of_arcs = []
+        for i in range(len(m)):
+            #print(type(m[i].nonCrossingArcDiag().arc_list[0]))
+            list_of_arcs.append(m[i].nonCrossingArcDiag().arc_list[0])
+        if elt:
+            max_rep_list.append([ArcDiag(list_of_arcs,n),elt.nonCrossingArcDiag()])
+        else:
+            max_rep_list.append(ArcDiag(list_of_arcs,n))
+    return max_rep_list
+    
+
+
 
 """
 # # Tests

@@ -91,7 +91,7 @@ def forcingOrder(n, essential=True):
 
 def CongruenceLattice(n, essential=True):
     F = forcingOrder(n, essential)
-    return LatticePoset(([tuple(a) for a in F.antichains()], lambda p,q: all(any(x.isSubarc(y) for y in q) for x in p)))
+    return LatticePoset(([tuple(a) for a in F.antichains()], lambda p,q: all(any(y.isSubarc(x) for y in q) for x in p)))
 
 # In[4]:
 

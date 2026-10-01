@@ -25,7 +25,7 @@ permu_order_poset = Poset({0:[1,2],1:[3],2:[3]})
 # In[2]:
 
 
-def is_maxflag(L, ret = False, marde = False):
+def is_maxflag(L, return_complex = False, details = False):
     P = L.join_irreducibles_poset()
     E, E2 = [], set()
     for x in L:
@@ -48,19 +48,22 @@ def is_maxflag(L, ret = False, marde = False):
             if cs not in E2:
                 return False
         return True
-    if ret:
-        return E
-    if marde == True:
+
+    if details == True:
         s = ''
         if not is_simplicial():
             s += 'not simplicial  '
         if not is_flag():
             s += 'not flag  '
         if s != '':
-            return s
-        return True
+            res = s
+        else:
+            res = True
     else:
-        return is_simplicial() and is_flag()
+        res = is_simplicial() and is_flag()
+    if return_complex:
+        return res, E
+    return res
 
 def max_vs_covers(L):
     JI_P = L.join_irreducibles_poset()
@@ -368,3 +371,53 @@ for deco in allMaxFlags(n):
         print(factor)
         print()
 """
+
+def Test_Join_Max_Complex(L):
+    if not L.is_join_semidistributive():
+        raise Exception('L must be join-semidistributive')
+    s, E = is_maxflag(L, True, True)
+    if s != True:
+        raise Exception(f'L is {s}')
+    P = L.join_irreducibles_poset()
+    for x in L:
+        m = P.subposet([j for j in P if L.is_lequal(j,x)]).maximal_elements()
+        j = L.canonical_joinands(x)
+        if len(m) != len(j):
+            print('La representation join-canonique et la max-representation n ont pas la meme taille')
+            print(j, m)
+            return False
+    return True
+            
+
+# test if all elements of preimage have the same number of lower covers
+
+def Test_Join_Max_Complex_Interval(L):
+    if not L.is_join_semidistributive():
+        raise Exception('L must be join-semidistributive')
+    s, E = is_maxflag(L, True, True)
+    if s != True:
+        raise Exception(f'L is {s}')
+    P = L.join_irreducibles_poset()
+    L2 = LatticePoset(([tuple(sorted(a, key = hash)) for a in P.antichains()], lambda p,q: all(any(P.is_lequal(x, y) for y in q) for x in p)))
+    for x in L:
+        m = tuple(sorted(P.subposet([j for j in P if L.is_lequal(j,x)]).maximal_elements(), key = hash))
+        j = tuple(sorted(L.canonical_joinands(x), key = hash))
+        size = len(j)
+        for a in L2.interval(j, m):
+            for i in a:
+                if sum(1 for k in j if P.is_lequal(k, i)) > 1:
+                    print(j, a)
+                    return False
+    return True
+
+def Test_Join_bigger_than_Max(L):
+    if not L.is_join_semidistributive():
+        raise Exception('L must be join-semidistributive')
+    P = L.join_irreducibles_poset()
+    for x in L:
+        m = P.subposet([j for j in P if L.is_lequal(j,x)]).maximal_elements()
+        j = L.canonical_joinands(x)
+        if len(m) < len(j):
+            print(j, m)
+            return False
+    return True

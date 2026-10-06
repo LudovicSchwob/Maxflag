@@ -1,6 +1,9 @@
 ## Test Louis
 *.ipynb
 
+# Mac files
+.DS_Store
+
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof

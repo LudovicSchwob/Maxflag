@@ -76,6 +76,7 @@ def max_vs_covers(L):
 # In[3]:
 
 
+
 def forcingOrder(n, essential=True,simple = False):
     all_arcs = SingleArc.allArcs(n,essential=essential,simple=simple)
     vertices = []
@@ -101,6 +102,8 @@ n = 4
 L = CongruenceLattice(n, False)
 L2 = LatticePoset(L.subposet([x for x in L if is_maxflag(LatticePoset(WOQuotient.fromSingleArcList(x, n).poset()))]))
 """
+# In[4]:
+
 
 def allPermuTreesClasses(n):
     s = [i for i in range(n-2)]
@@ -177,6 +180,7 @@ def permuQuotient(decoration,n):
         #The decorations of the first and last node have no bearing on the resulting quotient
         node = decoration[i]
         if node in [1,3]:
+
             arc_list.append(([i+2],i+1,i+3,[]))
         if node in [2,3]:
             arc_list.append(([],i+1,i+3,[i+2]))
@@ -331,6 +335,7 @@ def minMaxFlag(n):
     for i in range(1,n-2):
         arc_list.append(([i+1],i,i+3,[i+2]))
     return WOQuotient.fromArcList(arc_list,n)
+
     
 
 
@@ -430,6 +435,7 @@ def Test_Join_Max_Complex_Interval(L):
                     print(j, a)
                     return False
     return True
+
 
 def Test_Join_Max_Complex_Interval2(L):
     if not L.is_join_semidistributive():

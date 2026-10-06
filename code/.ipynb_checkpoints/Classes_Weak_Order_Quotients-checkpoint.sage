@@ -154,52 +154,61 @@ class SingleArc:
     """
 
     @classmethod
-    def allArcs(cls,n,ideal_list = [],as_arc_list=False,essential=False):
+    def allArcs(cls,n,ideal_list = [],as_arc_list=False,essential=False,simple = False):
         #Initialize the list
         list_of_arcs = []
-        #We first go through every possible endpoints combinations
-        if as_arc_list:
+        if simple:
+            if as_arc_list or ideal_list != []:
+                raise Exception("Wrong settings")
             for i in range(1,n):
-                for j in range (i+1,n+1):
-                    #To get every possible SingleArc with endpoints (i,j), we go over every possible configuration of over/under for the interior points.
-                    #If there's no interior point, simply add the arc
-                    if j-i < 2:
-                        if not essential:
-                            list_of_arcs.append(([],i,j,[]))
-                    else:
-                        #We create a list of all subsets of interior points
-                        intr_points = [x for x in range(i+1,j)]
-                        subsetsb = [[]]
-                        for intr_point in intr_points:
-                            subsetsb += [s+[intr_point] for s in subsetsb]
-
-                        for subsetb in subsetsb:
-                            list_of_arcs.append((subsetb,i,j,R))
+                for j in range(i+2,n+1):
+                    list_of_arcs.append(cls.fromArc(([k for k in range(i+1,j)],i,j,[]),n))
+                    list_of_arcs.append(cls.fromArc(([],i,j,[k for k in range(i+1,j)]),n))
+            return list_of_arcs
         else:
-
-            for i in range(1,n):
-                for j in range (i+1,n+1):
-                    #To get every possible SingleArc with endpoints (i,j), we go over every possible configuration of over/under for the interior points.
-                    #If there's no interior point, simply add the arc
-                    if j-i < 2:
-                        if not essential:
-                            new_single_arc = cls.fromArc(([],i,j,[]),n)
-                            if new_single_arc not in ideal_list:
-                                list_of_arcs.append(new_single_arc)
-                    else:
-                        #We create a list of all subsets of interior points
-                        intr_points = [x for x in range(i+1,j)]
-                        subsetsb = [[]]
-                        for intr_point in intr_points:
-                            subsetsb += [s+[intr_point] for s in subsetsb]
-
-                        for subsetb in subsetsb:
-                            #For every subset we add a SingleArc to the list where L contains the points in the subset and R contains the other interior points
-                            R = [x for x in range(i+1,j) if x not in subsetb]
-                            new_single_arc = cls.fromArc((subsetb,i,j,R),n)
-                            if new_single_arc not in ideal_list:
-                                list_of_arcs.append(new_single_arc)
-        return list_of_arcs
+            #We first go through every possible endpoints combinations
+            if as_arc_list:
+                for i in range(1,n):
+                    for j in range (i+1,n+1):
+                        #To get every possible SingleArc with endpoints (i,j), we go over every possible configuration of over/under for the interior points.
+                        #If there's no interior point, simply add the arc
+                        if j-i < 2:
+                            if not essential:
+                                list_of_arcs.append(([],i,j,[]))
+                        else:
+                            #We create a list of all subsets of interior points
+                            intr_points = [x for x in range(i+1,j)]
+                            subsetsb = [[]]
+                            for intr_point in intr_points:
+                                subsetsb += [s+[intr_point] for s in subsetsb]
+    
+                            for subsetb in subsetsb:
+                                list_of_arcs.append((subsetb,i,j,R))
+            else:
+    
+                for i in range(1,n):
+                    for j in range (i+1,n+1):
+                        #To get every possible SingleArc with endpoints (i,j), we go over every possible configuration of over/under for the interior points.
+                        #If there's no interior point, simply add the arc
+                        if j-i < 2:
+                            if not essential:
+                                new_single_arc = cls.fromArc(([],i,j,[]),n)
+                                if new_single_arc not in ideal_list:
+                                    list_of_arcs.append(new_single_arc)
+                        else:
+                            #We create a list of all subsets of interior points
+                            intr_points = [x for x in range(i+1,j)]
+                            subsetsb = [[]]
+                            for intr_point in intr_points:
+                                subsetsb += [s+[intr_point] for s in subsetsb]
+    
+                            for subsetb in subsetsb:
+                                #For every subset we add a SingleArc to the list where L contains the points in the subset and R contains the other interior points
+                                R = [x for x in range(i+1,j) if x not in subsetb]
+                                new_single_arc = cls.fromArc((subsetb,i,j,R),n)
+                                if new_single_arc not in ideal_list:
+                                    list_of_arcs.append(new_single_arc)
+            return list_of_arcs
 
 
     """

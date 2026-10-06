@@ -73,8 +73,8 @@ def max_vs_covers(L):
 # In[3]:
 
 
-def forcingOrder(n, essential=True):
-    all_arcs = SingleArc.allArcs(n,essential=essential)
+def forcingOrder(n, essential=True,simple = False):
+    all_arcs = SingleArc.allArcs(n,essential=essential,simple=simple)
     vertices = []
     rels = []
     for i in range(len(all_arcs)):
@@ -171,9 +171,9 @@ def permuQuotient(decoration,n):
         #The decorations of the first and last node have no bearing on the resulting quotient
         node = decoration[i]
         if node in [1,3]:
-            arc_list.append(([],i+1,i+3,[i+2]))
-        if node in [2,3]:
             arc_list.append(([i+2],i+1,i+3,[]))
+        if node in [2,3]:
+            arc_list.append(([],i+1,i+3,[i+2]))
     #print(arc_list)
     #print(n)
     return WOQuotient.fromArcList(arc_list,n)
@@ -225,8 +225,8 @@ def biWordToMaxFlagPermu(bin_word):
 
 # In[14]:
 
-def allMaxFlags(n, essential=True):
-    F = forcingOrder(n, essential)
+def allMaxFlags(n, essential=True,simple=False):
+    F = forcingOrder(n, essential,simple)
     maxflag, notmf = [], []
     for a in F.antichains():
         Q = WOQuotient.fromSingleArcList(a, n)
@@ -302,11 +302,29 @@ def maxRep(quo,with_elt=False):
         for i in range(len(m)):
             #print(type(m[i].nonCrossingArcDiag().arc_list[0]))
             list_of_arcs.append(m[i].nonCrossingArcDiag().arc_list[0])
-        if elt:
-            max_rep_list.append([ArcDiag(list_of_arcs,n),elt.nonCrossingArcDiag()])
+        if with_elt:
+            max_rep_list.append([ArcDiag(list_of_arcs,quo.n),elt.nonCrossingArcDiag()])
         else:
-            max_rep_list.append(ArcDiag(list_of_arcs,n))
+            max_rep_list.append(ArcDiag(list_of_arcs,quo.n))
     return max_rep_list
+
+
+def maxRepOneElt(quo,elt):
+    L = LatticePoset(quo.poset())
+    JI_P = L.join_irreducibles_poset()
+    m = JI_P.subposet([j for j in JI_P if L.is_lequal(j,elt)]).maximal_elements()
+    list_of_arcs = []
+    for i in range(len(m)):
+        #print(type(m[i].nonCrossingArcDiag().arc_list[0]))
+        list_of_arcs.append(m[i].nonCrossingArcDiag().arc_list[0])
+    return ArcDiag(list_of_arcs,quo.n)
+
+#Returns the "min max-flag quotient of the weak order on S_n
+def minMaxFlag(n):
+    arc_list = []
+    for i in range(1,n-2):
+        arc_list.append(([i+1],i,i+3,[i+2]))
+    return WOQuotient.fromArcList(arc_list,n)
     
 
 

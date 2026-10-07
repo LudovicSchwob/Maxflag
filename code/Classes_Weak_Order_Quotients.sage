@@ -271,6 +271,9 @@ class SingleArc:
     ########################################
     #### Methods ###########################
     ########################################
+    
+    def asArc(self):
+    	return (self.L,self.i,self.j,self.R)
 
     """
         forcingCovers

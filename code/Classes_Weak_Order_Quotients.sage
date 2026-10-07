@@ -687,7 +687,7 @@ class SingleArc:
         width = size/14
         for l in range(1,self.n+1):
             point_list.append([l, 0])
-        ax.plot(list(range(1, n+1)), n*[0], marker = 'o', markersize = size/7, linestyle = '', c = 'black')
+        ax.plot(list(range(1, n+1)), n*[0], marker = 'o', markersize = size/7, linestyle = '', c = 'black', zorder=0)
 
         semi_circles = self.sepArcs()
         if semi_circles[0][2] == 2:
@@ -2013,7 +2013,7 @@ class ArcDiag:
         for single_arc in self.arc_list:
             semi_circles = single_arc.sepArcs()
             if semi_circles[0][2] == 2:
-                ax.plot([semi_circles[0][0], semi_circles[0][1]], [0, 0], color = 'red', linewidth = width)
+                ax.plot([semi_circles[0][0], semi_circles[0][1]], [0, 0], color = 'red', linewidth = width, zorder=0)
             else:
                 for semi_circle in semi_circles:
                     curr_half = semi_circle[2]

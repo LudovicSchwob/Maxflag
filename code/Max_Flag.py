@@ -31,7 +31,7 @@ def is_maxflag(L, return_complex = False, details = False):
     for x in L:
         m = P.subposet([j for j in P if L.is_lequal(j,x)]).maximal_elements()
         if len(m) == 2:
-            E.append(m)
+            E.append(tuple(m))
         elif len(m) >= 2:
             E2.add(tuple(sorted(m, key = hash)))
     G = Graph(E)

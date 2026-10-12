@@ -1,3 +1,6 @@
+load('Sorting_Orders.sage')
+load('Rhombus_Tilings.sage')
+
 def MaxflagCompatibilities(n):
     L = LatticePoset(minMaxFlag(n).poset())
     G = Graph(is_maxflag(L, return_complex = True)[1])
@@ -73,11 +76,13 @@ def JuraCambPosets(n):
 def inversionSet(p):
     return [(j, i) for k, i in enumerate(p) for j in p[k+1:] if i > j]
 
-def IdealInversions(P, n):
+def IdealInversions(P, n, up = True):
     I = {}
     for p in Permutations(n):
-        S = Set(inversion_set(p))
-        if P.is_order_ideal(S):
+        S = Set(inversionSet(p))
+        if up and P.is_order_ideal(S):
+            I[p] = S
+        elif not up and P.is_order_filter(S):
             I[p] = S
     return LatticePoset((I, lambda p,q: I[p].issubset(I[q])))
 
@@ -290,6 +295,20 @@ Sorting words corresponding to cambrian middle orders :
 (2, 1, 2) (2, 1, 4, 3, 2, 1, 4, 3, 2, 4)
 (1, 2, 2) (1, 4, 3, 2, 1, 4, 3, 2, 4, 3)
 (2, 2, 2) (4, 3, 2, 1, 4, 3, 2, 4, 3, 4)
+
+
+D = [w.main for w in testSortingOrders(4).values()]
+W = WeylGroup(['A', 3], prefix = 's')
+l = [t for t in CommutationClasses(W) if tuple(t) not in D]
+L = WSortingOrder(W, l[0])
+D = {"red": [], "blue":[]}
+L = L.relabel(lambda x: Permutation(list(x.to_permutation())))
+for x,y in L.cover_relations():
+    if x.permutohedron_lequal(y):
+        D["blue"].append((x,y))
+    else:
+        D["red"].append((x,y))
+L.plot(figsize = 20, edge_colors= D)
 """
 
 ########### generalisation autres types #############
@@ -371,3 +390,115 @@ def ImplicationPoset(W, c, maxima = True):
             if P.is_order_ideal(s) and not w in D:
                 print('Pas dans le quotient:', w)
     return P
+
+
+def w0_to_roots(W, w):
+    """
+    w = reduced word for W.w0
+    """
+    if type(W) == list:
+        W = WeylGroup(W, prefix = 's')
+    S = W.gens()
+    p = W(1)
+    w_to_r = {}
+    I = set()
+    for i, k in enumerate(w):
+        p *= S[k-1]
+        I2 = p.inversions(side = 'left', inversion_type = 'roots')
+        for j in I2:
+            if j not in I:
+                w_to_r[i] = j
+                break
+        I = set(I2)
+    return w_to_r
+
+def SortingOrderImplications(W, w):
+    L = SortingOrder(W, w)
+    G = DiGraph()
+    for k in range(len(w)):
+        G.add_vertex(k)
+    for x, y in Tuples(range(len(w)), 2):
+        if x != y:
+            if all(x not in S or y in S for S in L):
+                G.add_edge(x, y)
+    return Poset(G).relabel(w0_to_roots(W, w))
+
+    
+def WIdealInversions(W, P, up = True):
+    I = {}
+    for p in W:
+        S = Set(p.inversions(side = 'left', inversion_type = 'roots'))
+        if up and P.is_order_ideal(S):
+            I[p] = S
+        elif not up and P.is_order_filter(S):
+            I[p] = S
+    return LatticePoset((I, lambda p,q: I[p].issubset(I[q])))
+
+
+def TestCambJura(W):
+    if type(W) == list:
+        W = WeylGroup(W, prefix = 's')
+    C = CommutationClasses(W)
+    l = []
+    cat = W.catalan_number()
+    for w in C:
+        P = SortingOrderImplications(W, w)
+        L = WIdealInversions(W, P, True)
+        a = (len(L) == cat)
+        b = L.is_semidistributive()
+        if a != b:
+            print('ERREUR', w)
+            if a:
+                print('taille catalan mais pas semidistributif')
+            else:
+                print('semidistributif mais pas taille catalan')
+        if a or b:
+            print(w)
+            l.append(w)
+    return l
+
+"""
+W = WeylGroup(['A', 4], prefix = 's')
+D = {"red": [], "blue":[]}
+G = CommutationClassesGraph(W)  # voir Rhombus_Tilings.sage
+l = [tuple(t) for t in TestCambJura(W)]
+for t in G:
+    if t in l:
+        D["blue"].append(t)
+    else:
+        D["red"].append(t)
+P = Poset(G)
+P.plot(figsize = 20, vertex_colors = D)
+P2 = LatticePoset(P.subposet(D["blue"])) 
+
+"""
+
+def CambJuraFactorization(n):
+    P = Poset(([tuple(c) for c in Combinations(range(n),3)], lambda p,q: all(i<=j for i,j in zip(p,q))))
+    S, I = [], []
+    for x, y in P.cover_relations():
+        if x[2] == y[2]:
+            S.append((x, y))
+        if x[0] == y[0]:
+            I.append((x, y))
+    return S, I
+
+"""
+S, I = CambJuraFactorization(5)
+G = Factorization_to_Graph(S, I)
+is_TAFS(G)
+len(MOPLattice(G,False))
+
+# gives a semidistributive lattice of size 1, 2, 6, 24, 121, 750, 5681, 52914...
+
+f-vecteurs :
+
+1
+1	1
+1	4	1
+1	10	12	1
+1	20	63	36	1
+1	35	224	358	130	2
+1	56	630	2082	2213	672	27
+"""
+

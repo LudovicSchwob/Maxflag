@@ -77,6 +77,57 @@ def ReducedWord_to_RhombusTiling(n,w):
                 t.append(labels[i])
         T.append(t)
     return T
+"""
+def CommutationMin(w):
+    l = w.copy()
+    for k in range(1,len(l)):
+        t = k
+        for i in range(k):
+            if l[k-i-1]-1 <= l[k]:
+                t = i
+                break
+        l = l[:k-t] + [l[k]] + l[k-t:k] + l[k+1:]
+    return l
+"""
+
+def CommutationClassesGraph(W):
+    G = W.coxeter_diagram()
+    braids = {}
+    for x, y, e in G.edges():
+        s1, s2 = [], []
+        for k in range(e):
+            if k%2:
+                s1.append(y)
+                s2.append(x)
+            else:
+                s1.append(x)
+                s2.append(y)
+        braids[tuple(s1)] = s2
+    E, E2 = [], []
+    for w in W.w0.reduced_words():
+        for b in braids:
+            k = len(b)
+            for i in range(len(w)-k+1):
+                if tuple(w[i:i+k]) == b:
+                    w2 = w.copy()
+                    w2[i:i+k] = braids[b]
+                    E2.append((tuple(w), tuple(w2)))
+        s = str(w)
+        for i in range(1,len(w)):
+            if not G.has_edge(w[i-1], w[i]) and w[i-1]<w[i]:
+                w2 = w.copy()
+                w2[i], w2[i-1] = w2[i-1], w2[i]
+                E.append((tuple(w), tuple(w2)))
+#    return DiGraph(E+E2), {"red": E, "blue": E2}
+    P = Poset(DiGraph(E))
+    C = DiGraph(E+E2)
+    for c in P.connected_components():
+        x = c.minimal_elements()[0]
+        c2 = list(c)
+        i = c2.index(x)
+        del c2[i]
+        C.merge_vertices([x] + c2)
+    return C
 
 #needs 'Middle orders.sage'
 

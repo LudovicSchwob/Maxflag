@@ -1,0 +1,101 @@
+"""
+Motivation : les Alt-Jurassiens de taille catalan (en type A)
+sont paramétrisés par les faces (ou intervalles) x<=y de Tamari tels que 
+on peut passer de x à y par des rotations
+  /\           /\
+ /\ \   -->   / /\        où B est une feuille
+A  B C       A B  C
+
+Les faces "essentielles" de Tamari sont comptées par A076025
+A076025 compte aussi les chemins de Schröder sans pic à une hauteur impaire,
+donnant le treillis des idéaux d'un poset triangulaire où on a doublé un étage sur deux
+"""
+
+
+# et si on prend n'importe quel idéal de l'ordre de forçage au lieu de juste les atomes ?
+def EdgeCoarsening(L, I):
+    """
+    I = list of join-irreducibles representing an ideal of the forcing order
+    """
+    G = DiGraph()
+    for x in L:
+        G.add_vertex(x)
+    for x, y in L.cover_relations():
+        if Edge_to_JoinIrr(L, x, y) in I:
+            G.add_edge(x, y)
+    return Poset(G)
+
+def AltFaces(L, I, lattice = True):
+    """
+    I = ideal of the forcing order
+    """
+    P = EdgeCoarsening(L, I)
+    EF = [(x, y) for x, y in LatticeFaces(L, False) if P.is_lequal(x, y)]
+    if lattice:
+        return Poset((EF, lambda p, q: all(L.is_lequal(i,j) for i,j in zip(p, q))))
+    return EF
+    
+# ne donne pas un treillis si L contient des hexagones (nécessite l'extrémalité ?)
+def EssentialFaces(L, lattice = True):
+    return AltFaces(L, L.atoms(), lattice)
+
+# échoue pour les treillis semidistributifs non extrémaux
+def Test_AltFaces(L):
+    G = SDLGraph(L)
+    F = ForcingOrder(G)
+    for I in F.order_ideals_lattice():
+        l = []
+        for i in I:
+            l.extend(list(i))
+        L2 = AltFaces(L, l)
+        if L2.is_lattice():
+            L2 = LatticePoset(L2)
+            if not L2.is_semidistributive():
+                print(I, 'pas semidistributif')
+        else:
+            print(I, 'pas un treillis')
+
+
+def AltIntervals(L, I, lattice = True):
+    """
+    I = ideal of the forcing order
+    """
+    P = EdgeCoarsening(L, I)
+    EF = [(x, y) for x, y in L.intervals_poset() if P.is_lequal(x, y)]
+    if lattice:
+        return Poset((EF, lambda p, q: all(L.is_lequal(i,j) for i,j in zip(p, q))))
+    return EF
+
+
+"""
+Marche toujours pour les faces mais pas pour les intervalles (pour Tamari en tout cas)
+Il faut que l'idéal de l'ordre de forçage soit "clos par extensions"
+ceux-ci ne forment pas un sous-treillis du treillis des congruences
+mais semblent former un treillis distributif
+"""
+def Test_AltFacesIntervals(L):
+    G = SDLGraph(L)
+    F = ForcingOrder(G)
+    sI = []
+    FI = F.order_ideals_lattice()
+    for I in FI:
+        l = []
+        for i in I:
+            l.extend(list(i))
+        L2 = AltFaces(L, l)
+        L3 = AltIntervals(L, l)
+        print(len(L2), len(L3))
+        if L2.is_lattice():
+            L2 = LatticePoset(L2)
+            if not L2.is_semidistributive():
+                print(l, 'Faces : pas semidistributif')
+        else:
+            print(l, 'Faces : pas un treillis')
+        if L3.is_lattice():
+            sI.append(Set(l))
+            L3 = LatticePoset(L3)
+            if not L3.is_semidistributive():
+                print(l, 'Intervalles : pas semidistributif')
+        else:
+            print(l, 'Intervalles : pas un treillis')
+    return LatticePoset((sI, lambda p,q : p.issubset(q)))
